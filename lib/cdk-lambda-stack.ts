@@ -18,9 +18,10 @@ export class CdkLambdaStack extends cdk.Stack {
       },
     });
 
-    // � create an Output for the API URL
+    // Create an Output for the API URL
     new cdk.CfnOutput(this, "ApiGateway URL", { value: api.url });
 
+    // Create lambda function
     const remoteSchemaFunction = new lambda.Function(
       this,
       "RemoteSchemaFunction2",
@@ -32,6 +33,7 @@ export class CdkLambdaStack extends cdk.Stack {
       }
     );
 
+    // Add API route, and add event to the lambda function
     const gql = api.root.addResource("gql");
     gql.addMethod(
       "Any",
