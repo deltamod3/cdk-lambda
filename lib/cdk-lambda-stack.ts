@@ -21,23 +21,48 @@ export class CdkLambdaStack extends cdk.Stack {
     // Create an Output for the API URL
     new cdk.CfnOutput(this, "ApiGateway URL", { value: api.url });
 
-    // Create lambda function
-    const remoteSchemaFunction = new lambda.Function(
+    // Create Javascript lambda function
+    const jsRemoteSchemaFunction = new lambda.Function(
       this,
-      "RemoteSchemaFunction2",
+      "JSRemoteSchemaFunction",
       {
         runtime: lambda.Runtime.NODEJS_14_X,
         handler: "remote_schema/index.main",
-        code: lambda.Code.fromAsset("./handlers"),
+        code: lambda.Code.fromAsset("src/javascript"),
         timeout: Duration.seconds(30),
       }
     );
 
     // Add API route, and add event to the lambda function
-    const gql = api.root.addResource("gql");
-    gql.addMethod(
+    const jsRoute = api.root.addResource("javascript").addResource("gql");
+    jsRoute.addMethod(
       "Any",
-      new apigateway.LambdaIntegration(remoteSchemaFunction)
+      new apigateway.LambdaIntegration(jsRemoteSchemaFunction)
     );
+
+    // Create Python lambda function
+    const pythonRemoteSchemaFunction = new lambda.Function(
+      this,
+      "PythonRemoteSchemaFunction",
+      {
+        runtime: lambda.Runtime.PYTHON_3_8,
+        handler: "app/main.handler",
+        code: lambda.Code.fromAsset("src/python"),
+        timeout: Duration.seconds(30),
+      }
+    );
+
+    // Add API route, and add event to the lambda function
+    const pythonRoute = api.root.addResource("python").addResource("gql");
+    pythonRoute.addMethod(
+      "Any",
+      new apigateway.LambdaIntegration(pythonRemoteSchemaFunction)
+    );
+    pythonRoute.addProxy({
+      defaultIntegration: new apigateway.LambdaIntegration(
+        pythonRemoteSchemaFunction
+      ),
+      anyMethod: true,
+    });
   }
 }
