@@ -3,8 +3,11 @@
 *.d.ts
 node_modules
 package-lock.json
+.env
 
 # CDK asset staging directory
 .cdk.staging
 cdk.out
 template.yaml
+.aws-sam
+.cognito

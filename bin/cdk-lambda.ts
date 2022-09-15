@@ -1,21 +1,18 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from 'aws-cdk-lib';
-import { CdkLambdaStack } from '../lib/cdk-lambda-stack';
+import "source-map-support/register";
+import * as cdk from "aws-cdk-lib";
+import { CdkLambdaStack } from "../lib/cdk-lambda-stack";
 
 const app = new cdk.App();
-new CdkLambdaStack(app, 'CdkLambdaStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
-
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+new CdkLambdaStack(app, "CdkLambdaStack", {
+  multiAz: true,
+  appName: "distroplaypen",
+  hasuraUrl: "https://gql.playpen01.distro.energy",
+  hasuraHostname: "gql.playpen01.distro.energy",
+  hasuraAdminSecret: "C4nY0uGu3ssM3",
+  region: "eu-west-1",
+  hostedZoneId: "Z0491312352QGOMK32CC5",
+  hostedZoneName: "playpen01.distro.energy",
+  lambdasHostname: "actions.playpen01.distro.energy",
+  gql_remote_schema: "https://actions.playpen01.distro.energy/gql",
 });
