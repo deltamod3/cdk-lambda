@@ -29,6 +29,8 @@ export const signupHandler = (
     _context: Context,
     callback: PostConfirmation_ConfirmSignUp_Callback
 ) => {
+    console.log("Event");
+    console.log(JSON.stringify(event));
     const requestHeaders = {
         "Content-Type": "application/json",
         "x-hasura-admin-secret": process.env.hasuraAdminSecret!,
@@ -44,13 +46,7 @@ export const signupHandler = (
 
     //if its the first time a user has signed up, create a user record in db
     if (event.triggerSource === "PostConfirmation_ConfirmSignUp") {
-        request({
-            url: process.env.hasuraUrl + "/v1/graphql",
-            document: INSERT_USER,
-            variables: { handle, id, role: "site-user" },
-            requestHeaders,
-        }).then((_data) => {
-            callback(null, event);
-        });
+        console.log(event);
     }
+    callback(null, event);
 };

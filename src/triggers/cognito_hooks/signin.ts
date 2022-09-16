@@ -39,6 +39,8 @@ export const signinHandler = async (
     event: TokenGenerationEvent,
     _context: Context
 ) => {
+    console.log("Event");
+    console.log(JSON.stringify(event));
     const requestHeaders = {
         "Content-Type": "application/json",
         "x-hasura-admin-secret": process.env.hasuraAdminSecret!,
